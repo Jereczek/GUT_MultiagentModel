@@ -17,11 +17,6 @@ class RaeUnitTests(unittest.TestCase):
         rae = Rae(0)
         pass
 
-    def test_createObject_NumberOfAgentsIsFive_FiveByFiveMatrixWithOnesShouldGetInitialized(self):
-        rae = Rae(5)
-
-        self.assertEqual(rae.trustworthiness_matrix.shape, (5,))
-
     def test_createObject_NumberOfAgentsIsFive_NumberOfAgentsShouldBeFive(self):
         rae = Rae(5)
 

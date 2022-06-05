@@ -1,4 +1,5 @@
 import numpy as np
+from suswa.suswalib.systems.timestep_data import TimestepData
 
 class Rae:
     """
@@ -7,25 +8,33 @@ class Rae:
     Aggregates agents' reputation data and calculates their trustworthiness.
     """
 
-    def __init__(self, number_of_agents: int, initial_reputation: float = 1.0, discount_factor: int = 1,):
-        if number_of_agents == 0:
-            pass # 0 will be treated as a special value for static initalization methods
-        elif number_of_agents < 0:
-            raise Exception("'numer_of_agents' must be a positive integer")
-        
+    # __delta = np.empty()
+
+    # trustworthiness_matrix = np.empty()
+    # number_of_agents = 0
+
+
+    def __init__(self, number_of_agents: int, initial_reputation: float = 1.0, discount_factor: int = 1):
+        self.__data = [TimestepData(number_of_agents, initial_reputation)]
+
         self.number_of_agents = number_of_agents
-        self.trustworthiness_matrix = np.ones((number_of_agents)) * initial_reputation
+        self.discount_factor = discount_factor
+        self.current_timestep = 0
 
-        self.__delta = np.zeros((number_of_agents, number_of_agents))
-
-    @staticmethod
-    def from_matrix(array: np.ndarray):
-        if array is None:
-            raise Exception(f"Attribute 'matrix' can't be None")
+        self.__delta = [np.zeros((number_of_agents, number_of_agents))]
         
-        r = Rae(0)
-        
-        r.number_of_agents = len(array)
-        r.trustworthiness_matrix = array.copy()
 
-        return r
+    def aggregate(self):
+        pass
+
+    def __aggregate_for(self, i: int):
+        """
+        Implementation of R_i,avg(t) reputation data aggregation formula for a single agent (i)
+        """
+        r = [x for x in range(self.number_of_agents) if x not in [i]]
+        t = self.current_timestep
+
+        sum = 0.0
+
+        for j in r:
+            sum += self.__data[t][i][j] * np.power(self.discount_factor, self.__delta[t][i][j]) #TODO: - R(t - self.__delta[t])
