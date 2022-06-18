@@ -21,7 +21,7 @@ class Rae:
         self.discount_factor = discount_factor
         self.current_timestep = 0
 
-        self.__delta = [np.zeros((number_of_agents, number_of_agents))]
+        
         
 
     def aggregate(self):
@@ -37,4 +37,4 @@ class Rae:
         sum = 0.0
 
         for j in r:
-            sum += self.__data[t][i][j] * np.power(self.discount_factor, self.__delta[t][i][j]) #TODO: - R(t - self.__delta[t])
+            sum += self.__data[t][i][j] * np.power(self.discount_factor, self.__data.delta[t][i][j]) #TODO: - R(t - self.__delta[t])

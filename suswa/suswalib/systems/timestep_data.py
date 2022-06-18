@@ -8,7 +8,8 @@ class TimestepData:
         elif number_of_agents < 0:
             raise Exception("'numer_of_agents' must be a positive integer")
         
-        self.trustworthiness_matrix = np.ones((number_of_agents, number_of_agents)) * initial_reputation
+        self.trustworthiness_vector = np.ones(number_of_agents) * initial_reputation
+        self.delta = np.zeros((number_of_agents, number_of_agents))
 
     def __getitem__(self, key):
-        return self.trustworthiness_matrix[key]
+        return self.trustworthiness_vector[key]
