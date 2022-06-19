@@ -1,4 +1,5 @@
 import unittest
+from xmlrpc.client import Boolean
 import numpy as np
 
 # pylint: disable=[import-error]
@@ -32,3 +33,12 @@ class RaeUnitTests(unittest.TestCase):
         td = TimestepData(5)
 
         self.assertEqual(td.trustworthiness_vector.shape, (5,))
+
+    def test_random(self):
+        temp_range = np.linspace(1, 1, num=5, dtype=int)
+        temp_range = np.array(np.append(temp_range, np.linspace(0, 0, num=2, dtype=int)), dtype='bool')
+
+        np.random.shuffle(temp_range)
+
+        for i in temp_range:
+            print(i)

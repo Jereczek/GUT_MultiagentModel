@@ -38,3 +38,4 @@ The topic of PRNG (Pseudo Random Number Generator) seems to be a side-topic for 
 Find a place for these stochastic (random) variables:
 * A_ij(t) - avaliability of services by provider i to receiver j
 * G_ij(t) - efficiency of receiving a service from provider i by receiver j
+
