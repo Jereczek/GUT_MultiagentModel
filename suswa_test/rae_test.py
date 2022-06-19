@@ -15,12 +15,12 @@ class RaeUnitTests(unittest.TestCase):
 
 
     def test_createObject_NumberOfAgentsIsFive_NumberOfAgentsShouldBeFive(self):
-        rae = Rae(5, 2)
+        rae = Rae(5, 2, None)
 
         self.assertEqual(rae.number_of_agents, 5)
     
     def test_createObject_NumberOfSAgentsIsTwo_NumberOfSAgentsInArrayShouldBeTwo(self):
-        rae = Rae(5, 2)
+        rae = Rae(5, 2, None)
 
         number_of_s_agents = 0
 

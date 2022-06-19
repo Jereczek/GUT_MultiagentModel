@@ -1,6 +1,9 @@
+from asyncio import constants
 from select import select
 import numpy as np
 from numpy.random import Generator, MT19937
+from suswa.suswalib.systems.constants_data import ConstantsData
+from suswa.suswalib.systems.policies.policy import BehaviorPolicy
 
 from suswa.suswalib.systems.timestep_data import TimestepData
 
@@ -21,6 +24,7 @@ class Rae:
     def __init__(self,
         number_of_agents: int,
         number_of_s_agents: int,
+        constants: ConstantsData,
         initial_reputation: float = 1.0,
         discount_factor: int = 1
         ):
@@ -32,6 +36,8 @@ class Rae:
         self.current_timestep = 0
 
         self.strategic_agents = self.__get_vector_of_s_agents()
+
+        self.constants = constants
 
     def __get_vector_of_s_agents(self):
         """
@@ -48,7 +54,13 @@ class Rae:
         return temp_range
 
     def aggregate(self):
-        pass
+        r_i_avg = []
+
+        for n in range(self.number_of_agents):
+            r_i_avg.append(self.__aggregate_for(n))
+
+        return r_i_avg
+
 
     def __aggregate_for(self, i: int):
         """
@@ -60,4 +72,18 @@ class Rae:
         sum = 0.0
 
         for j in r:
-            sum += self.__data[t][i][j] * np.power(self.discount_factor, self.__data.delta[t][i][j]) #TODO: - R(t - self.__data[t].delta[i][j])
+            t_minus_delta_t = t - self.__data[t].delta[i][j]
+            sum += self.__data[t][i][j] * np.power(self.discount_factor, self.__data[t].delta[i][j]) - self.R(i, j, t_minus_delta_t) 
+        
+        return sum
+
+    def R(self, i, j, t):
+        return BehaviorPolicy.apply_service_receiving_policy_static(
+                self.constants,
+                self.strategic_agents[j],
+                self.__data[t].gain[i][j] * BehaviorPolicy.apply_service_policy_static(
+                    self.constants,
+                    self.strategic_agents[i],
+                    self.__data[t].availability[i][j],
+                    self.__data[t].trustworthiness_vector[j]),
+                self.__data[t].trustworthiness_vector[i])
