@@ -6,7 +6,7 @@ import unittest
 
 import context
 
-import suswa.suswalib.systems.default_policies
+import suswa.suswalib.systems.policies.default_policies
 
 class DefaultPolicyUnitTests(unittest.TestCase):
 
@@ -16,13 +16,13 @@ class DefaultPolicyUnitTests(unittest.TestCase):
     def test_default_m_policy(self):
         expected = self.availability * self.threshold
 
-        actual = suswa.suswalib.systems.default_policies.default_m_policy(True, self.availability, self.threshold)
+        actual = suswa.suswalib.systems.policies.default_policies.default_m_policy(True, self.availability, self.threshold)
 
         self.assertEqual(expected, actual)
         
     def test_default_d_policy(self):
         expected = self.threshold
 
-        actual = suswa.suswalib.systems.default_policies.default_d_policy(True, self.availability, self.threshold)
+        actual = suswa.suswalib.systems.policies.default_policies.default_d_policy(True, self.availability, self.threshold)
 
         self.assertEqual(expected, actual)

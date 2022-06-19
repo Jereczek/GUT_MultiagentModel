@@ -1,9 +1,11 @@
 import numpy as np
 
-def default_m_policy(is_s_agent, availability: float, threshold: float):
+# Note: is_s_agent is unused in this case, however expected by BehaviorPolicy
+def default_m_policy(is_s_agent, availability: float, threshold: float) -> float:
     return availability * threshold
 
-def default_d_policy(is_s_agent, availability: float, threshold: float):
+# Note: is_s_agent is unused in this case, however expected by BehaviorPolicy
+def default_d_policy(is_s_agent, availability: float, threshold: float) -> float:
     return np.minimum(availability, threshold)
 
 def default_service_policy(is_s_agent, y: float, x: float, trustworthiness: float) -> float:
