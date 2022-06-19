@@ -8,7 +8,7 @@ import context
 
 from suswa.suswalib.systems.timestep_data import *
 
-class RaeUnitTests(unittest.TestCase):
+class TimeStampDataUnitTests(unittest.TestCase):
 
     def test_createObject_invalidNumberOfAgentsProvided_shouldThrowException(self):
         with self.assertRaises(Exception):

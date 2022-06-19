@@ -18,3 +18,14 @@ class RaeUnitTests(unittest.TestCase):
         rae = Rae(5, 2)
 
         self.assertEqual(rae.number_of_agents, 5)
+    
+    def test_createObject_NumberOfSAgentsIsTwo_NumberOfSAgentsInArrayShouldBeTwo(self):
+        rae = Rae(5, 2)
+
+        number_of_s_agents = 0
+
+        for i in rae.strategic_agents:
+            if(i):
+                number_of_s_agents += 1
+
+        self.assertEqual(number_of_s_agents, 2)

@@ -18,7 +18,12 @@ class Rae:
 
     rng = Generator(MT19937())
 
-    def __init__(self, number_of_agents: int, number_of_s_agents, initial_reputation: float = 1.0, discount_factor: int = 1):
+    def __init__(self,
+        number_of_agents: int,
+        number_of_s_agents: int,
+        initial_reputation: float = 1.0,
+        discount_factor: int = 1
+        ):
         self.__data = [TimestepData(number_of_agents, initial_reputation)]
         
         self.number_of_agents = number_of_agents
@@ -26,16 +31,16 @@ class Rae:
         self.discount_factor = discount_factor
         self.current_timestep = 0
 
-        self.__strategic_agents = self.__get_vector_of_s_agents()
+        self.strategic_agents = self.__get_vector_of_s_agents()
 
-    def __get_vector_of_s_agents(self, number_of_s_agents: int):
+    def __get_vector_of_s_agents(self):
         """
         Creates a shuffeled array of True/False values, where True ocurrs 'number_of_s_agent' times - True symbolizes an s-agent.
         """
         if self.number_of_s_agents > self.number_of_agents:
             raise Exception("'number_of_s_agents' must be lower or equal to 'number_of_agents'")
 
-        temp_range = np.linspace(1, 1, num=number_of_s_agents, dtype=int)
+        temp_range = np.linspace(1, 1, num=self.number_of_s_agents, dtype=int)
         temp_range = np.array(np.append(temp_range, np.linspace(0, 0, num=self.number_of_agents - self.number_of_s_agents, dtype=int)), dtype='bool')
 
         np.random.shuffle(temp_range)
