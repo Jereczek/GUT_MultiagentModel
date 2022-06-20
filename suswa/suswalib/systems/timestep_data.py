@@ -13,7 +13,7 @@ class TimestepData:
     service_receiving_policy - matrix representing the policy of agent j reporting services received by agent i
     """
 
-    def __init__(self, number_of_agents: int, initial_reputation: float = 1.0, exponent: float = 1.0):
+    def __init__(self, number_of_agents: int, initial_reputation: float = 1.0, exponent_a: float = 1.0, exponent_g: float = 1.0):
         if number_of_agents == 0:
             pass # 0 will be treated as a special value for static initalization methods
         elif number_of_agents < 0:
@@ -24,8 +24,8 @@ class TimestepData:
         self.trustworthiness_vector = np.ones(number_of_agents) * initial_reputation
         self.delta = np.zeros((number_of_agents, number_of_agents))
 
-        self.availability = TimestepData.__get_matrix_with_random_distribution(number_of_agents, exponent, rng)
-        self.gain = TimestepData.__get_matrix_with_random_distribution(number_of_agents, exponent, rng)
+        self.availability = TimestepData.__get_matrix_with_random_distribution(number_of_agents, exponent_a, rng)
+        self.gain = TimestepData.__get_matrix_with_random_distribution(number_of_agents, exponent_g, rng)
 
         self.service_policy = np.zeros((number_of_agents, number_of_agents))
         self.service_receiving_policy = np.zeros((number_of_agents, number_of_agents))
