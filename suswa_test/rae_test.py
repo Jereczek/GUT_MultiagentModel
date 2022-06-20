@@ -1,3 +1,6 @@
+from suswa.suswalib.systems.constants_data import ConstantsData
+from suswa.suswalib.systems.policies.default_policy import DefaultPolicy
+from suswa.suswalib.systems.policies.policy import BehaviorPolicy
 from suswa.suswalib.systems.rae import Rae
 
 import unittest
@@ -10,17 +13,19 @@ from suswa.suswalib.agents.agent import *
 
 class RaeUnitTests(unittest.TestCase):
 
+    sample_consts = ConstantsData(1.0, 1.0, 1.0, DefaultPolicy(), 1.0, 1.0)
+
     def test_selftest(self):
         self.assertTrue(True)
 
 
     def test_createObject_NumberOfAgentsIsFive_NumberOfAgentsShouldBeFive(self):
-        rae = Rae(5, 2, None)
+        rae = Rae(5, 2, self.sample_consts)
 
         self.assertEqual(rae.number_of_agents, 5)
     
     def test_createObject_NumberOfSAgentsIsTwo_NumberOfSAgentsInArrayShouldBeTwo(self):
-        rae = Rae(5, 2, None)
+        rae = Rae(5, 2, self.sample_consts)
 
         number_of_s_agents = 0
 

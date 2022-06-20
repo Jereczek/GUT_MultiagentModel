@@ -8,7 +8,7 @@ import context
 from suswa.suswalib.systems.constants_data import ConstantsData
 
 from suswa.suswalib.systems.policies.policy import BehaviorPolicy
-from suswa.suswalib.systems.policies.default_policies import *
+from suswa.suswalib.systems.policies.default_policy_methods import *
 
 class PolicyUnitTests(unittest.TestCase):
 
@@ -77,7 +77,7 @@ class PolicyUnitTests(unittest.TestCase):
             default_service_policy,
             default_service_receiving_policy
         )
-        data = ConstantsData(0.1, 0.2, 0.3, policy)
+        data = ConstantsData(0.1, 0.2, 0.3, policy, 1.0, 1.0)
         a = 1
         trustworthiness = 1
         is_a_agent = False
@@ -94,7 +94,7 @@ class PolicyUnitTests(unittest.TestCase):
             default_service_policy,
             default_service_receiving_policy
         )
-        data = ConstantsData(0.1, 0.2, 0.3, policy)
+        data = ConstantsData(0.1, 0.2, 0.3, policy, 1.0, 1.0)
         a = 1
         trustworthiness = 1
         is_a_agent = False
