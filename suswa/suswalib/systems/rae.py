@@ -42,7 +42,7 @@ class Rae:
             else:
                 raise Exception("Invalid 'initial_reputation' - expecting either float, array or None.")
             
-        self.data = [TimestepData(number_of_agents, self.initial_reputation, constants.expo_a, constants.expo_g)]
+        self.data = [TimestepData(number_of_agents, self.initial_reputation, constants.expo_a, constants.expo_g, constants.i_min, constants.i_max, self.rng)]
 
         if(self.initial_reputation < 0):
             self.data[0].trustworthiness_vector = initial_trustwothiness_vector
@@ -83,14 +83,15 @@ class Rae:
         high_avg = self.get_avg_of_cluster(r_i_avg, n_high)
         low_avg = self.get_avg_of_cluster(r_i_avg, n_low)
 
-        new_timestep_data = TimestepData(self.number_of_agents, self.initial_reputation, self.constants.expo_a, self.constants.expo_g)
+        new_timestep_data = TimestepData(self.number_of_agents, self.initial_reputation, self.constants.expo_a, self.constants.expo_g, self.constants.i_min, self.constants.i_max, self.rng)
 
         self.set_multiple(new_timestep_data.trustworthiness_vector, n_high, high_avg / high_avg)
         self.set_multiple(new_timestep_data.trustworthiness_vector, n_low, low_avg / high_avg)
 
-        self.data.append(new_timestep_data)
-
         self.data[self.current_timestep].delta += 1
+        new_timestep_data.delta = self.data[self.current_timestep].delta
+
+        self.data.append(new_timestep_data)        
         self.current_timestep += 1
 
         pass
@@ -112,7 +113,7 @@ class Rae:
                 n_2.append(i)
                 n_2_sum += r_averages[i]
 
-        if n_1_sum < n_2_sum:
+        if (n_1_sum / len(n_1)) < (n_2_sum / len(n_2)):
             return (n_2, n_1)
         
         return (n_1, n_2)
@@ -147,7 +148,7 @@ class Rae:
 
             sum += self.data[t].trustworthiness_vector[j] * np.power(self.discount_factor, self.data[t].delta[i][j]) - self.__R(i, j, t_minus_delta_t)
         
-        return sum
+        return sum / len(r)
 
     def __R(self, i, j, t):
         return BehaviorPolicy.apply_service_receiving_policy_static(
