@@ -1,5 +1,5 @@
+from array import array
 from asyncio import constants
-from select import select
 import numpy as np
 from numpy.random import Generator, MT19937
 from suswa.algorithms.kmeans import TwoMeans
@@ -26,13 +26,27 @@ class Rae:
         number_of_agents: int,
         number_of_s_agents: int,
         constants: ConstantsData,
-        initial_reputation: float = 1.0,
+        initial_reputation = None,
         discount_factor: int = 1
         ):
-        self.__data = [TimestepData(number_of_agents, initial_reputation, constants.expo_a, constants.expo_g)]
         
-        self.initial_reputation = initial_reputation
+        self.initial_reputation = -1.0
 
+        if(initial_reputation is None):
+            initial_trustwothiness_vector = self.rng.random(number_of_agents)
+        elif(type(initial_reputation) is float):
+            self.initial_reputation = initial_reputation
+        else:
+            if(initial_reputation.shape != (0, ) and len(initial_reputation.shape) < 2):
+                initial_trustwothiness_vector = initial_reputation
+            else:
+                raise Exception("Invalid 'initial_reputation' - expecting either float, array or None.")
+            
+        self.data = [TimestepData(number_of_agents, self.initial_reputation, constants.expo_a, constants.expo_g)]
+
+        if(self.initial_reputation < 0):
+            self.data[0].trustworthiness_vector = initial_trustwothiness_vector
+        
         self.number_of_agents = number_of_agents
         self.number_of_s_agents = number_of_s_agents
         self.discount_factor = discount_factor
@@ -54,7 +68,7 @@ class Rae:
         temp_range = np.linspace(1, 1, num=self.number_of_s_agents, dtype=int)
         temp_range = np.array(np.append(temp_range, np.linspace(0, 0, num=self.number_of_agents - self.number_of_s_agents, dtype=int)), dtype='bool')
 
-        np.random.shuffle(temp_range)
+        self.rng.shuffle(temp_range)
 
         return temp_range
 
@@ -75,7 +89,7 @@ class Rae:
         self.set_multiple(new_timestep_data.trustworthiness_vector, n_high, high_avg / high_avg)
         self.set_multiple(new_timestep_data.trustworthiness_vector, n_low, low_avg / high_avg)
 
-        self.__data.append(new_timestep_data)
+        self.data.append(new_timestep_data)
 
         pass
 
@@ -123,8 +137,8 @@ class Rae:
         sum = 0.0
 
         for j in r:
-            t_minus_delta_t = t - self.__data[t].delta[i][j]
-            sum += self.__data[t][i][j] * np.power(self.discount_factor, self.__data[t].delta[i][j]) - self.__R(i, j, t_minus_delta_t) 
+            t_minus_delta_t = t - self.data[t].delta[i][j]
+            sum += self.data[t][i][j] * np.power(self.discount_factor, self.data[t].delta[i][j]) - self.__R(i, j, t_minus_delta_t) 
         
         return sum
 
@@ -132,9 +146,9 @@ class Rae:
         return BehaviorPolicy.apply_service_receiving_policy_static(
                 self.constants,
                 self.strategic_agents[j],
-                self.__data[t].gain[i][j] * BehaviorPolicy.apply_service_policy_static(
+                self.data[t].gain[i][j] * BehaviorPolicy.apply_service_policy_static(
                     self.constants,
                     self.strategic_agents[i],
-                    self.__data[t].availability[i][j],
-                    self.__data[t].trustworthiness_vector[j]),
-                self.__data[t].trustworthiness_vector[i])
+                    self.data[t].availability[i][j],
+                    self.data[t].trustworthiness_vector[j]),
+                self.data[t].trustworthiness_vector[i])

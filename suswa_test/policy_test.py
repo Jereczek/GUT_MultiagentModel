@@ -77,7 +77,7 @@ class PolicyUnitTests(unittest.TestCase):
             default_service_policy,
             default_service_receiving_policy
         )
-        data = ConstantsData(0.1, 0.2, 0.3, policy, 1.0, 1.0)
+        data = ConstantsData(0.1, 0.2, 0.3, policy, 1.0, 1.0, 0, 10)
         a = 1
         trustworthiness = 1
         is_a_agent = False
@@ -94,7 +94,7 @@ class PolicyUnitTests(unittest.TestCase):
             default_service_policy,
             default_service_receiving_policy
         )
-        data = ConstantsData(0.1, 0.2, 0.3, policy, 1.0, 1.0)
+        data = ConstantsData(0.1, 0.2, 0.3, policy, 1.0, 1.0, 0, 10)
         a = 1
         trustworthiness = 1
         is_a_agent = False
