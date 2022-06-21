@@ -6,5 +6,5 @@ class TwoMeans():
         self.kmeans = KMeans(init=init, n_clusters=n_clusters, n_init=n_init, max_iter=max_iter)
 
     def fit(self, array):
-        return self.kmeans.fit(array)
+        return self.kmeans.fit(array.reshape(-1,1))
 

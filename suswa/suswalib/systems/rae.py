@@ -73,11 +73,10 @@ class Rae:
         return temp_range
 
     def aggregate(self):
-        r_i_avg = []
+        r_i_avg = np.empty(self.number_of_agents)
 
         for n in range(self.number_of_agents):
-            r_i_avg.append(self.__aggregate_for(n))
-
+            r_i_avg[n] = self.__aggregate_for(n)
         
         n_high, n_low = self.clusterize(r_i_avg)
 
@@ -91,6 +90,9 @@ class Rae:
 
         self.data.append(new_timestep_data)
 
+        self.data[self.current_timestep].delta += 1
+        self.current_timestep += 1
+
         pass
 
     def clusterize(self, r_averages):
@@ -102,8 +104,8 @@ class Rae:
         n_1_sum = 0
         n_2_sum = 0
 
-        for i in len(current_clusters):
-            if current_clusters[i] == 0:
+        for i in range(len(current_clusters.labels_)):
+            if current_clusters.labels_[i] == 0:
                 n_1.append(i)
                 n_1_sum += r_averages[i]
             else:
@@ -136,9 +138,14 @@ class Rae:
 
         sum = 0.0
 
+        # May need to swap i and j everywhere, not sure though :/
         for j in r:
-            t_minus_delta_t = t - self.data[t].delta[i][j]
-            sum += self.data[t][i][j] * np.power(self.discount_factor, self.data[t].delta[i][j]) - self.__R(i, j, t_minus_delta_t) 
+            if(i in self.data[t].choosen_service_providers[j]):
+                self.data[t].delta[i][j] = 0
+
+            t_minus_delta_t = int(t - self.data[t].delta[i][j])
+
+            sum += self.data[t].trustworthiness_vector[j] * np.power(self.discount_factor, self.data[t].delta[i][j]) - self.__R(i, j, t_minus_delta_t)
         
         return sum
 

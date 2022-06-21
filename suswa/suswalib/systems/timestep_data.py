@@ -26,7 +26,7 @@ class TimestepData:
             rng = Generator(MT19937())
         
         self.trustworthiness_vector = np.ones(number_of_agents) * initial_reputation
-        self.delta = np.zeros((number_of_agents, number_of_agents))
+        self.delta = np.zeros((number_of_agents, number_of_agents), dtype=int)
 
         self.availability = TimestepData.__get_matrix_with_random_distribution(number_of_agents, exponent_a, rng)
         self.gain = TimestepData.__get_matrix_with_random_distribution(number_of_agents, exponent_g, rng)
